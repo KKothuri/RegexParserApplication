@@ -245,7 +245,7 @@ IntervalArray::const_iterator IntervalSet::find_element(wchar_t element) const
 	while (low <= high)
 	{
 		size_t mid = (low + high) / 2;
-		
+
 		if (element <= m_intervals[mid].second && element >= m_intervals[mid].first) // Element found.
 		{
 			return m_intervals.cbegin() + mid;

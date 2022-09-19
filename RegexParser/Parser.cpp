@@ -101,6 +101,11 @@ std::shared_ptr<ParseTree> Parser::parse_regex(const SymbolArray& symbols, const
 		end = symbols.size();
 	}
 
+	if (bracket_pairs[start] == end - 1)
+	{
+		end--;
+	}
+
 	auto parseTree = std::make_shared<ParseTree>();
 	parseTree->content = Regex;
 
@@ -117,7 +122,7 @@ std::shared_ptr<ParseTree> Parser::parse_regex(const SymbolArray& symbols, const
 	}
 	else
 	{
-		auto option_start = start;
+		auto option_start = options_index == symbols.size() ? start : start + 1;
 		for (auto option : options)
 		{
 			parseTree->children.push_back(parse_simple_regex(symbols, bracket_pairs, options_list, option_start, option));
@@ -131,6 +136,11 @@ std::shared_ptr<ParseTree> Parser::parse_regex(const SymbolArray& symbols, const
 
 std::shared_ptr<ParseTree> Parser::parse_simple_regex(const SymbolArray& symbols, const std::vector<size_t>& bracket_pairs, const OptionsList& options_list, size_t start, size_t end)
 {
+	if (bracket_pairs[start] == end)
+	{
+		start++;
+	}
+
 	auto parseTree = std::make_shared<ParseTree>();
 	parseTree->content = SimpleRegex;
 
@@ -174,8 +184,9 @@ std::shared_ptr<ParseTree> Parser::parse_simple_regex(const SymbolArray& symbols
 			if (symbols[iter + 1].symbol == L'{')
 			{
 				op_end = bracket_pairs[iter + 1];
-				iter = op_end;
 			}
+
+			iter = op_end;
 
 			child = parse_unit(symbols, bracket_pairs, options_list, unit_start, unit_end, op_start, op_end);
 		}
@@ -223,7 +234,14 @@ std::shared_ptr<ParseTree> Parser::parse_unit(const SymbolArray& symbols, const 
 	}
 	else
 	{
-		parseTree->characterSet = get_named_character_class(symbol);
+		if (symbol.symbol == L'd' || symbol.symbol == L'D')
+		{
+			parseTree->characterSet = get_named_character_class(symbol);
+		}
+		else
+		{
+			parseTree->characterSet.insert(symbol.symbol);
+		}
 	}
 
 	parseTree->repetition = parse_operator(symbols, op_start, op_end);
@@ -309,7 +327,7 @@ IntervalSet Parser::parse_character_class(const SymbolArray& symbols, size_t sta
 		}
 		else
 		{
-			if (symbol.symbol != L'd' || L'D')
+			if (symbol.symbol == L'd' || symbol.symbol == L'D')
 			{
 				result += get_named_character_class(symbol);
 			}

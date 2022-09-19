@@ -10,7 +10,7 @@ class IntervalSet
 {
 public:
 	IntervalSet() {};
-	
+
 	// Insert an element into the set.
 	void insert(wchar_t element);
 

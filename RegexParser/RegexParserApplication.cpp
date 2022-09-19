@@ -6,9 +6,9 @@
 
 int main()
 {
-    std::wcout << L"Hello World!\n";
+	std::wcout << L"Hello World!\n";
 
-    auto parseTree = Parser::parse(L"[4-7]\\d{3}[a-z\\d]|\\\\?hi");
+	auto parseTree = Parser::parse(L"(([4-7]{2}\\d){3}[a-z\\d]|\\\\?hi)");
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

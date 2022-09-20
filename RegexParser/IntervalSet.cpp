@@ -1,4 +1,6 @@
 #include "IntervalSet.h"
+#include <random>
+#include <chrono>
 
 void IntervalSet::insert(wchar_t element)
 {
@@ -90,12 +92,18 @@ void IntervalSet::insert_interval(wchar_t start, wchar_t inclusive_end)
 	if (end_iter->first > inclusive_end + 1)
 	{
 		start_iter->second = inclusive_end;
-		m_intervals.erase(start_iter + 1, end_iter - 1);
+		if (start_iter + 1 <= end_iter - 1)
+		{
+			m_intervals.erase(start_iter + 1, end_iter - 1);
+		}
 	}
 	else // End + 1 exists
 	{
 		start_iter->second = end_iter->second;
-		m_intervals.erase(start_iter + 1, end_iter);
+		if (start_iter + 1 <= end_iter)
+		{
+			m_intervals.erase(start_iter + 1, end_iter);
+		}
 	}
 
 }
@@ -205,6 +213,50 @@ void IntervalSet::union_with(const IntervalSet& _other)
 	m_intervals = temp_vector;
 }
 
+IntervalSet IntervalSet::intersection(const IntervalSet& _right) const
+{
+	IntervalSet result;
+
+	auto iter = m_intervals.begin();
+	auto other_iter = _right.m_intervals.begin();
+
+	while (iter != m_intervals.end() && other_iter != _right.m_intervals.end())
+	{
+		while (iter->second < other_iter->first && iter != m_intervals.end())
+		{
+			iter++;
+		}
+
+		if (iter == m_intervals.end())
+		{
+			break;
+		}
+		
+		while (other_iter->second < iter->first && other_iter != _right.m_intervals.end())
+		{
+			other_iter++;
+		}
+
+		if (other_iter == _right.m_intervals.end())
+		{
+			break;
+		}
+
+		result.insert_interval(std::max(iter->first, other_iter->first), std::min(iter->second, other_iter->second));
+
+		if (iter->second > other_iter->second)
+		{
+			other_iter++;
+		}
+		else
+		{
+			iter++;
+		}
+	}
+
+	return result;
+}
+
 void IntervalSet::invert()
 {
 	IntervalArray result;
@@ -296,4 +348,37 @@ IntervalArray::iterator IntervalSet::find_lower(wchar_t element)
 	}
 
 	return m_intervals.begin() + low;
+}
+
+bool IntervalSet::empty() const
+{
+	return m_intervals.empty();
+}
+
+size_t IntervalSet::size() const
+{
+	size_t count = 0;
+	for (const auto& iter : m_intervals)
+	{
+		count += iter.second - iter.first + 1;
+	}
+
+	return count;
+}
+
+wchar_t IntervalSet::get_nth_element(size_t index) const
+{
+	for (const auto& iter : m_intervals)
+	{
+		if (iter.second - iter.first + 1 < index)
+		{
+			index -= iter.second - iter.first + 1;
+		}
+		else
+		{
+			return iter.first + (wchar_t)index;
+		}
+	}
+
+	throw;
 }

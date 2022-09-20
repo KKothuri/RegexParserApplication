@@ -132,6 +132,8 @@
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="PrefilteringConfigurationGeneration.cpp" />
     <ClCompile Include="RegexParserApplication.cpp" />
+    <ClCompile Include="RegexQuality.cpp" />
+    <ClCompile Include="RegexQuality.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IntervalSet.h" />

@@ -7,9 +7,7 @@ enum ParseNodeContent
 {
 	Regex,
 	SimpleRegex,
-	Unit,
-	Literal,
-	CharacterClass
+	Unit
 };
 
 struct ParseTree

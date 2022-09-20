@@ -29,8 +29,20 @@ public:
 	// Union this set with the input set.
 	void union_with(const IntervalSet& _other);
 
+	// Return intersection of two sets
+	IntervalSet intersection(const IntervalSet& _right) const;
+
 	// Invert the current set
 	void invert();
+
+	// Return true if set is empty
+	bool empty() const;
+
+	// Return a nth from the set.
+	wchar_t get_nth_element(size_t index) const;
+
+	// Return number of elements
+	size_t size() const;
 
 	// Calls the union function
 	IntervalSet& operator+=(const IntervalSet& _right);

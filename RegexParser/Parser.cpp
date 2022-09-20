@@ -229,7 +229,14 @@ std::shared_ptr<ParseTree> Parser::parse_unit(const SymbolArray& symbols, const 
 		}
 		else
 		{
-			parseTree->characterSet.insert(symbol.symbol);
+			if (symbol.symbol != L'.')
+			{
+				parseTree->characterSet.insert(symbol.symbol);
+			}
+			else
+			{
+				parseTree->characterSet.invert();
+			}
 		}
 	}
 	else

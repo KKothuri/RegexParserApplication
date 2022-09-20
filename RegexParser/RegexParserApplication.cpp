@@ -3,12 +3,22 @@
 
 #include <iostream>
 #include "Parser.h"
+#include "RegexQuality.h"
 
 int main()
 {
 	std::wcout << L"Hello World!\n";
 
-	auto parseTree = Parser::parse(L"(([4-7]{2}\\d){3}[a-z\\d]|\\\\?hi)");
+	auto parseTree = Parser::parse(L"([a-z0-9]+[a-z][a-z][a-z\\d]+)");
+
+	if (VerifySequentialQuantifiers(parseTree))
+	{
+		std::wcout << "Sequential Qualifiers not present" << "\n";
+	}
+	else
+	{
+		std::wcout << "Sequential Qualifiers detected" << "\n";
+	}
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

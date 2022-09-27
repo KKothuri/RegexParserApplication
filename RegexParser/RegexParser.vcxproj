@@ -139,6 +139,7 @@
     <ClInclude Include="IntervalSet.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="ParseTree.h" />
+    <ClInclude Include="PrefilteringConfiguration.h" />
     <ClInclude Include="PrefilteringConfigurationGeneration.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

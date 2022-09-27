@@ -4,21 +4,32 @@
 #include <iostream>
 #include "Parser.h"
 #include "RegexQuality.h"
+#include "PrefilteringConfigurationGeneration.h"
 
 int main()
 {
 	std::wcout << L"Hello World!\n";
 
-	auto parseTree = Parser::parse(L"([a-z0-9]+[a-z][a-z][a-z\\d]+)");
+	auto parseTree = Parser::parse(L"([a-z0-9]+[a-z][a-z][a-z\\d]{30, 500})");
+
+	for (int i = 0; i < 10; i++)
+	{
+		std::wcout << GenerateRandomMatchString(parseTree) << "\n";
+	}
 
 	if (VerifySequentialQuantifiers(parseTree))
 	{
-		std::wcout << "Sequential Qualifiers not present" << "\n";
+		std::wcout << "Sequential Quantifiers not present" << "\n";
 	}
 	else
 	{
-		std::wcout << "Sequential Qualifiers detected" << "\n";
+		std::wcout << "Sequential Quantifiers detected" << "\n";
 	}
+
+	auto parseTree2 = Parser::parse(L"([2-9][0-9]{3}([ \\-]?[0-9]{4}){2})");
+
+	bool alldigits;
+	PreFilteringConfiguration config = GeneratePreFilteringConfiguration(parseTree2, alldigits);
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

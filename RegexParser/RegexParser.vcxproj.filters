@@ -47,5 +47,8 @@
     <ClInclude Include="PrefilteringConfigurationGeneration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PrefilteringConfiguration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

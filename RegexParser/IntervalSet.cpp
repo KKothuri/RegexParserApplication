@@ -268,6 +268,7 @@ void IntervalSet::invert()
 		if (interval.first != start)
 		{
 			result.push_back(Interval(start, interval.first - 1));
+			start = interval.second;
 		}
 	}
 
@@ -318,7 +319,7 @@ IntervalArray::const_iterator IntervalSet::find_element(wchar_t element) const
 
 IntervalArray::iterator IntervalSet::find_lower(wchar_t element)
 {
-	// Empty set or all elements are greater tahn given element
+	// Empty set or all elements are greater than given element
 	if (m_intervals.empty() || m_intervals[0].first > element)
 	{
 		return m_intervals.end();
@@ -370,7 +371,7 @@ wchar_t IntervalSet::get_nth_element(size_t index) const
 {
 	for (const auto& iter : m_intervals)
 	{
-		if (iter.second - iter.first + 1 < index)
+		if (iter.second - iter.first + 1 <= index)
 		{
 			index -= iter.second - iter.first + 1;
 		}

@@ -16,6 +16,7 @@ struct ParseTree
 	wchar_t symbol;
 	std::pair<int, int> repetition;
 	IntervalSet characterSet;
+	bool nullable;
 
 	std::vector<std::shared_ptr<ParseTree>> children;
 };

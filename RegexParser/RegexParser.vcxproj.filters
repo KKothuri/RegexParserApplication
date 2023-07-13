@@ -33,6 +33,12 @@
     <ClCompile Include="RegexQuality.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RegexComplexity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MatchIterator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Parser.h">
@@ -48,6 +54,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PrefilteringConfiguration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RegexComplexity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MatchIterator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

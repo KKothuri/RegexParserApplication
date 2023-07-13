@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -129,18 +129,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="IntervalSet.cpp" />
+    <ClCompile Include="MatchIterator.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="PrefilteringConfigurationGeneration.cpp" />
+    <ClCompile Include="RegexComplexity.cpp" />
     <ClCompile Include="RegexParserApplication.cpp" />
     <ClCompile Include="RegexQuality.cpp" />
     <ClCompile Include="RegexQuality.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IntervalSet.h" />
+    <ClInclude Include="MatchIterator.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="ParseTree.h" />
     <ClInclude Include="PrefilteringConfiguration.h" />
     <ClInclude Include="PrefilteringConfigurationGeneration.h" />
+    <ClInclude Include="RegexComplexity.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -14,7 +14,7 @@ int main()
 
 	for (int i = 0; i < 10; i++)
 	{
-		std::wcout << GenerateRandomMatchString(parseTree) << "\n";
+		std::wcout << L"TC " << i + 1 << L": " <<  GenerateRandomMatchString(parseTree) << "\n\n";
 	}
 
 	if (VerifySequentialQuantifiers(parseTree))
@@ -26,7 +26,7 @@ int main()
 		std::wcout << "Sequential Quantifiers detected" << "\n";
 	}
 
-	auto parseTree2 = Parser::parse(L"([2-9][0-9]{3}([ \\-]?[0-9]{4}){2})");
+	auto parseTree2 = Parser::parse(L"([2-9][0-9]{3}([ \\-]?[0-9]{4}){2})"); //IndiaUniqueIdCardNumber
 
 	bool alldigits;
 	PreFilteringConfiguration config = GeneratePreFilteringConfiguration(parseTree2, alldigits);

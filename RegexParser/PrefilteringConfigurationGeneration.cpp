@@ -76,7 +76,7 @@ PreFilteringConfiguration GeneratePreFilteringConfiguration(const std::shared_pt
 			{
 				result.m_expectedDigits = child_configs[iter].m_expectedDigits;
 			}
-			else if (!digits_done)
+			else if (child_alldigits[iter] == true && !digits_done)
 			{
 				std::set<size_t> ans;
 				for (int i = 0; i < result.m_expectedDigits.size(); i++)

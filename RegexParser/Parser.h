@@ -40,7 +40,7 @@ private:
 
 	static std::shared_ptr<ParseTree> parse_unit(const SymbolArray& symbols, const std::vector<size_t>& bracket_pairs, const OptionsList& options_list, size_t unit_start, size_t unit_end, size_t op_start = 0, size_t op_end = 0);
 
-	static std::pair<int, int> parse_operator(const SymbolArray& symbols, size_t start, size_t end);
+	static std::pair<int, int> parse_operator(const SymbolArray& symbols, size_t start, size_t end, bool& nullable);
 
 	static IntervalSet parse_character_class(const SymbolArray& symbols, size_t start, size_t end);
 

@@ -108,6 +108,7 @@ std::shared_ptr<ParseTree> Parser::parse_regex(const SymbolArray& symbols, const
 
 	auto parseTree = std::make_shared<ParseTree>();
 	parseTree->content = Regex;
+	parseTree->nullable = true;
 
 	size_t options_index = start;
 	if (start == 0 && end == symbols.size())
@@ -126,9 +127,11 @@ std::shared_ptr<ParseTree> Parser::parse_regex(const SymbolArray& symbols, const
 		for (auto option : options)
 		{
 			parseTree->children.push_back(parse_simple_regex(symbols, bracket_pairs, options_list, option_start, option));
+			parseTree->nullable &= parseTree->children.back()->nullable;
 			option_start = option + 1;
 		}
 		parseTree->children.push_back(parse_simple_regex(symbols, bracket_pairs, options_list, option_start, end));
+		parseTree->nullable &= parseTree->children.back()->nullable;
 	}
 
 	return parseTree;
@@ -143,6 +146,7 @@ std::shared_ptr<ParseTree> Parser::parse_simple_regex(const SymbolArray& symbols
 
 	auto parseTree = std::make_shared<ParseTree>();
 	parseTree->content = SimpleRegex;
+	parseTree->nullable = true;
 
 	size_t unit_start, unit_end, op_start, op_end;
 
@@ -198,6 +202,7 @@ std::shared_ptr<ParseTree> Parser::parse_simple_regex(const SymbolArray& symbols
 		if (child)
 		{
 			parseTree->children.push_back(child);
+			parseTree->nullable &= parseTree->children.back()->nullable;
 		}
 	}
 
@@ -208,6 +213,7 @@ std::shared_ptr<ParseTree> Parser::parse_unit(const SymbolArray& symbols, const 
 {
 	auto parseTree = std::make_shared<ParseTree>();
 	parseTree->content = Unit;
+	parseTree->nullable = true;
 
 	const Symbol& symbol = symbols[unit_start];
 	std::shared_ptr<ParseTree> child;
@@ -221,11 +227,13 @@ std::shared_ptr<ParseTree> Parser::parse_unit(const SymbolArray& symbols, const 
 			if (child)
 			{
 				parseTree->children.push_back(child);
+				parseTree->nullable &= parseTree->children.back()->nullable;
 			}
 		}
 		else if (symbol.symbol == L'[')
 		{
 			parseTree->characterSet = parse_character_class(symbols, unit_start, unit_end);
+			parseTree->nullable = false;
 		}
 		else
 		{
@@ -237,6 +245,7 @@ std::shared_ptr<ParseTree> Parser::parse_unit(const SymbolArray& symbols, const 
 			{
 				parseTree->characterSet.invert();
 			}
+			parseTree->nullable = false;
 		}
 	}
 	else
@@ -249,14 +258,15 @@ std::shared_ptr<ParseTree> Parser::parse_unit(const SymbolArray& symbols, const 
 		{
 			parseTree->characterSet.insert(symbol.symbol);
 		}
+		parseTree->nullable = false;
 	}
 
-	parseTree->repetition = parse_operator(symbols, op_start, op_end);
+	parseTree->repetition = parse_operator(symbols, op_start, op_end, parseTree->nullable);
 
 	return parseTree;
 }
 
-std::pair<int, int> Parser::parse_operator(const SymbolArray& symbols, size_t start, size_t end)
+std::pair<int, int> Parser::parse_operator(const SymbolArray& symbols, size_t start, size_t end, bool& nullable) //nullable can only be set to true. Never set to false inside this function
 {
 	if (start == 0 && end == 0)
 	{
@@ -267,10 +277,12 @@ std::pair<int, int> Parser::parse_operator(const SymbolArray& symbols, size_t st
 		switch (symbols[start].symbol)
 		{
 		case L'*':
+			nullable = true;
 			return std::pair<int, int>(0, -1);
 		case L'+':
 			return std::pair<int, int>(1, -1);
 		case L'?':
+			nullable = true;
 			return std::pair<int, int>(0, 1);
 		default:
 			throw;
@@ -297,6 +309,11 @@ std::pair<int, int> Parser::parse_operator(const SymbolArray& symbols, size_t st
 			{
 				min_done = true;
 			}
+		}
+
+		if (min_rep == 0)
+		{
+			nullable = true;
 		}
 
 		if (min_done)
